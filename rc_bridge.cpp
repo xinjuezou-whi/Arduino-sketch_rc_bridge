@@ -18,7 +18,7 @@ All text above must be included in any redistribution.
 
 RcBridge::RcBridge(const uint8_t* PinArray, uint8_t ArraySize)
 {
-	if (ArraySize <= MAX_CHANEL_COUNT)
+	if (ArraySize <= MAX_CHANNEL_COUNT)
 	{
 		active_pin_count_ = ArraySize;
 		
@@ -49,7 +49,7 @@ void RcBridge::setMinMax(int FromMinMax[][MIN_MAX_LEN], int ToMinMax[][MIN_MAX_L
 
 long RcBridge::readRaw(int ChanelIndex)
 {		
-	return ChanelIndex < MAX_CHANEL_COUNT ?
+	return ChanelIndex < MAX_CHANNEL_COUNT ?
 		map(pulseIn(pin_ch_[ChanelIndex], HIGH), from_min_max_[ChanelIndex][0], from_min_max_[ChanelIndex][1],
 			to_min_max_[ChanelIndex][0], to_min_max_[ChanelIndex][1]) : 0;
 }

@@ -20,14 +20,16 @@ Changelog:
 #include <Wire.h>
 #include "rc_bridge.h"
 
-const String VERSION("00.00.01");
+const String VERSION("00.00.02");
 
-uint8_t pins[] =
+// RC related
+const uint8_t MAX_CHANNELS = 16;
+uint8_t pins_[] =
 {
   2, 3, 4, 5
 };
 
-int fromMinMax[8][2] = 
+int from_min_max_[8][2] = 
 { 
   {994, 1998}, 
   {994, 1998}, 
@@ -39,7 +41,7 @@ int fromMinMax[8][2] =
   {994, 1998}
 };
 
-int toMinMax[8][2] = 
+int to_min_max_[8][2] = 
 { 
   {50, -50}, 
   {50, -50}, 
@@ -51,24 +53,47 @@ int toMinMax[8][2] =
   {50, -50}
 };
 
-RcBridge bridge(pins, sizeof(pins), fromMinMax, toMinMax);
+RcBridge bridge_(pins_, sizeof(pins_), from_min_max_, to_min_max_);
+
+// iic related
+const int DEVICE_ADDR = 8;
+const uint8_t SEND_DATA_SIZE = MAX_CHANNELS; // 1 byte for ecah rc channel, totally 16 channels
+const uint8_t RECV_DATA_SIZE = 32; // Wire library has a softlimit up to 32 bytes
+byte send_data_[SEND_DATA_SIZE] = { 0 };
+byte recv_data_[RECV_DATA_SIZE] = { 0 };
+
+// function that executes whenever data is read by master
+// this function is registered as an event, see setup()
+void requestEvent()
+{
+  Wire.write(send_data_, SEND_DATA_SIZE);
+}
+
+// function that executes whenever data is received from master
+// this function is registered as an event, see setup()
+void receiveEvent(int Length)
+{
+  for (int i = 0; i < Length; ++i)
+  {
+    recv_data_[i] = Wire.read();
+  }
+}
 
 void setup() {
   //Starting Serial
   Serial.begin(9600);
   Serial.println(VERSION);
   Serial.println("\nReady");
+
+  // iic
+  Wire.begin(DEVICE_ADDR);      // join i2c bus with address
+  Wire.onRequest(requestEvent); // register events
+  Wire.onReceive(receiveEvent);
 }
 
 void loop() {
-   //prints receiver raw val
-   Serial.print(bridge.readRaw(0));
-   Serial.print("\t");  
-   Serial.print(bridge.readRaw(1));
-   Serial.print("\t");  
-   Serial.print(bridge.readRaw(2));
-   Serial.print("\t");  
-   Serial.print(bridge.readRaw(3));
-   Serial.print("\t");  
-   Serial.println();
+  for (uint8_t i = 0; i < MAX_CHANNELS; ++i)
+  {
+    send_data_[i] = bridge_.readRaw(i);
+  }
 }

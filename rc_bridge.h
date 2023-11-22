@@ -22,7 +22,7 @@ Changelog:
 
 class RcBridge
 {
-  static const uint8_t MAX_CHANEL_COUNT = 16;
+  static const uint8_t MAX_CHANNEL_COUNT = 16;
   static const uint8_t MIN_MAX_LEN = 2;
 
 public:
@@ -32,13 +32,13 @@ public:
 	long readRaw(int ChanelIndex);
 
 private:
-	uint8_t active_pin_count_{ MAX_CHANEL_COUNT };
-	uint8_t pin_ch_[MAX_CHANEL_COUNT] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-	int from_min_max_[MAX_CHANEL_COUNT][MIN_MAX_LEN] = { {1010, 2020}, {1010, 2020}, {1010, 2020}, {1010, 2020},
+	uint8_t active_pin_count_{ MAX_CHANNEL_COUNT };
+	uint8_t pin_ch_[MAX_CHANNEL_COUNT] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	int from_min_max_[MAX_CHANNEL_COUNT][MIN_MAX_LEN] = { {1010, 2020}, {1010, 2020}, {1010, 2020}, {1010, 2020},
 		{1010, 2020}, {1010, 2020}, {1010, 2020}, {1010, 2020},
 		{1010, 2020}, {1010, 2020}, {1010, 2020}, {1010, 2020},
 		{1010, 2020}, {1010, 2020}, {1010, 2020}, {1010, 2020}};
-	int to_min_max_[MAX_CHANEL_COUNT][MIN_MAX_LEN] = { {0, 100}, {0, 100}, {0, 100}, {0, 100},
+	int to_min_max_[MAX_CHANNEL_COUNT][MIN_MAX_LEN] = { {0, 100}, {0, 100}, {0, 100}, {0, 100},
     {0, 100}, {0, 100}, {0, 100}, {0, 100},
     {0, 100}, {0, 100}, {0, 100}, {0, 100},
 		{0, 100}, {0, 100}, {0, 100}, {0, 100}};
