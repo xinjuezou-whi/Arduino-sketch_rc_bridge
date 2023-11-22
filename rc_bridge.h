@@ -20,13 +20,14 @@ Changelog:
 #pragma once
 #include "Arduino.h"
 
-#define MIN_MAX_LEN 2
-#define MAX_CHANEL_COUNT 16
-
 class RcBridge
 {
+  static const uint8_t MAX_CHANEL_COUNT = 16;
+  static const uint8_t MIN_MAX_LEN = 2;
+
 public:
 	RcBridge(const uint8_t* PinArray, uint8_t ArraySize);
+  RcBridge(const uint8_t* PinArray, uint8_t ArraySize, int FromMinMax[][MIN_MAX_LEN], int ToMinMax[][MIN_MAX_LEN]);
 	void setMinMax(int FromMinMax[][MIN_MAX_LEN], int ToMinMax[][MIN_MAX_LEN]);
 	long readRaw(int ChanelIndex);
 

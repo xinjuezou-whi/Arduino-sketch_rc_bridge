@@ -20,6 +20,8 @@ Changelog:
 #include <Wire.h>
 #include "rc_bridge.h"
 
+const String VERSION("00.00.01");
+
 uint8_t pins[] =
 {
   2, 3, 4, 5
@@ -49,14 +51,13 @@ int toMinMax[8][2] =
   {50, -50}
 };
 
-RcBridge bridge(pins, sizeof(pins));
+RcBridge bridge(pins, sizeof(pins), fromMinMax, toMinMax);
 
 void setup() {
   //Starting Serial
   Serial.begin(9600);
-  Serial.println("Ready");
-
-  bridge.setMinMax(fromMinMax, toMinMax);
+  Serial.println(VERSION);
+  Serial.println("\nReady");
 }
 
 void loop() {

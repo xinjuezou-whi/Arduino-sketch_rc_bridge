@@ -20,14 +20,20 @@ RcBridge::RcBridge(const uint8_t* PinArray, uint8_t ArraySize)
 {
 	if (ArraySize <= MAX_CHANEL_COUNT)
 	{
-		active_pin_count_ = MAX_CHANEL_COUNT;
+		active_pin_count_ = ArraySize;
 		
-		for (uint8_t i = 0; i < ArraySize; ++i)
+		for (uint8_t i = 0; i < active_pin_count_; ++i)
 		{
 			pin_ch_[i] = PinArray[i];
 			pinMode(pin_ch_[i], INPUT);
 		}
 	}
+}
+
+RcBridge::RcBridge(const uint8_t* PinArray, uint8_t ArraySize, int FromMinMax[][MIN_MAX_LEN], int ToMinMax[][MIN_MAX_LEN])
+  : RcBridge(PinArray, ArraySize)
+{
+  setMinMax(FromMinMax, ToMinMax);
 }
 
 void RcBridge::setMinMax(int FromMinMax[][MIN_MAX_LEN], int ToMinMax[][MIN_MAX_LEN])
