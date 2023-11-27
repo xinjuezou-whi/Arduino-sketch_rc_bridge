@@ -20,10 +20,10 @@ Changelog:
 #include <Wire.h>
 #include "rc_bridge.h"
 
-const String VERSION("00.00.02");
+const String VERSION("00.01");
 
 // RC related
-const uint8_t MAX_CHANNELS = 16;
+const uint8_t MAX_CHANNELS = 4;
 uint8_t pins_[] =
 {
   2, 3, 4, 5
@@ -43,14 +43,14 @@ int from_min_max_[8][2] =
 
 int to_min_max_[8][2] = 
 { 
-  {50, -50}, 
-  {50, -50}, 
-  {50, -50}, 
-  {50, -50}, 
-  {50, -50}, 
-  {50, -50}, 
-  {50, -50}, 
-  {50, -50}
+  {0, 100}, 
+  {0, 100}, 
+  {0, 100}, 
+  {0, 100}, 
+  {0, 100}, 
+  {0, 100}, 
+  {0, 100}, 
+  {0, 100}
 };
 
 RcBridge bridge_(pins_, sizeof(pins_), from_min_max_, to_min_max_);
@@ -59,6 +59,7 @@ RcBridge bridge_(pins_, sizeof(pins_), from_min_max_, to_min_max_);
 const int DEVICE_ADDR = 8;
 const uint8_t SEND_DATA_SIZE = MAX_CHANNELS; // 1 byte for ecah rc channel, totally 16 channels
 const uint8_t RECV_DATA_SIZE = 32; // Wire library has a softlimit up to 32 bytes
+byte raw_data_[SEND_DATA_SIZE] = { 0 };
 byte send_data_[SEND_DATA_SIZE] = { 0 };
 byte recv_data_[RECV_DATA_SIZE] = { 0 };
 
@@ -66,6 +67,20 @@ byte recv_data_[RECV_DATA_SIZE] = { 0 };
 // this function is registered as an event, see setup()
 void requestEvent()
 {
+  // check if data is valid
+  for (uint8_t i = 0; i < SEND_DATA_SIZE; ++i)
+  {
+    send_data_[i] = raw_data_[i];
+    if (send_data_[i] > to_min_max_[i][1])
+    {
+      for (uint8_t j = 0; j < SEND_DATA_SIZE; ++j)
+      {
+        send_data_[j] = 255;
+      }
+
+      break;
+    }
+  }
   Wire.write(send_data_, SEND_DATA_SIZE);
 }
 
@@ -94,6 +109,6 @@ void setup() {
 void loop() {
   for (uint8_t i = 0; i < MAX_CHANNELS; ++i)
   {
-    send_data_[i] = bridge_.readRaw(i);
+    raw_data_[i] = bridge_.readRaw(i);
   }
 }
