@@ -20,7 +20,7 @@ Changelog:
 #include <Wire.h>
 #include "rc_bridge.h"
 
-const String VERSION("00.01");
+const String VERSION("00.02");
 
 // RC related
 const uint8_t MAX_CHANNELS = 4;
@@ -31,10 +31,10 @@ uint8_t pins_[] =
 
 int from_min_max_[8][2] = 
 { 
-  {994, 1998}, 
-  {994, 1998}, 
-  {994, 1998}, 
-  {994, 1998}, 
+  {994, 1988}, 
+  {994, 1988}, 
+  {994, 1988}, 
+  {994, 1988}, 
   {994, 1998}, 
   {994, 1998}, 
   {994, 1998}, 
