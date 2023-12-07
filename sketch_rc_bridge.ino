@@ -20,7 +20,7 @@ Changelog:
 #include <Wire.h>
 #include "rc_bridge.h"
 
-const String VERSION("00.02");
+const String VERSION("00.03");
 
 // RC related
 const uint8_t MAX_CHANNELS = 4;
@@ -71,7 +71,7 @@ void requestEvent()
   for (uint8_t i = 0; i < SEND_DATA_SIZE; ++i)
   {
     send_data_[i] = raw_data_[i];
-    if (send_data_[i] > to_min_max_[i][1])
+    if (send_data_[i] < to_min_max_[i][0] || send_data_[i] > to_min_max_[i][1])
     {
       for (uint8_t j = 0; j < SEND_DATA_SIZE; ++j)
       {
