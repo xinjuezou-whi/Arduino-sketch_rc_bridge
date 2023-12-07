@@ -2,6 +2,7 @@
 Bridge the PWM between Remote controller and other IIC devices
 
 Features:
+- PWM signal
 - I2C with master
 - xxx
 
